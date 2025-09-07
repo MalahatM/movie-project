@@ -1,5 +1,7 @@
 import express from 'express';
 
+
+
 // Interface
 interface MovieType {
   id: number;
@@ -51,6 +53,22 @@ app.get('/movies', (req, res) => {
   console.log("data get successfully");
   res.status(200).json(moviesData);
 });
+
+// Add (post) new Movie
+app.post('/movies', (req, res) => {
+  const { id, title, releaseYear, imageUrl } = req.body;
+
+  const newMovie: MovieType = {
+    id,
+    title,
+    releaseYear,
+    imageUrl,
+  };
+
+  moviesData.push(newMovie);
+  res.status(201).json(newMovie);
+});
+
 
 // Start server 
 app.listen(3000, () => {
