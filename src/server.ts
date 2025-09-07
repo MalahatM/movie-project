@@ -1,4 +1,5 @@
 import express from 'express';
+import {z}from 'zod';
 
 
 
@@ -9,6 +10,12 @@ interface MovieType {
   releaseYear: number; 
   imageUrl: string;    
 }
+const MovieSchema = z.object({
+	  id: z.number(),
+	  title: z.string(),
+	  releaseYear: z.number(),
+	  imageUrl: z.string()
+});
 
 // Movies array
 const moviesData: MovieType[] = [
@@ -54,21 +61,23 @@ app.get('/movies', (req, res) => {
   res.status(200).json(moviesData);
 });
 
-// Add (post) new Movie
-app.post('/movies', (req, res) => {
-  const { id, title, releaseYear, imageUrl } = req.body;
+// POST new Movie
 
-  const newMovie: MovieType = {
-    id,
-    title,
-    releaseYear,
-    imageUrl,
-  };
+app.post("/movies", (req, res) => {// Add new movie
+  const movieResult = MovieSchema.safeParse(req.body);// Validate input data
 
-  moviesData.push(newMovie);
-  res.status(201).json(newMovie);
+  if (!movieResult.success) {// Validation failed
+    return res.status(400).json({ message: "Invalid movie data" });
+  }
+
+  // Validated data
+  const { id, title, releaseYear, imageUrl } = movieResult.data;
+
+  const newMovie: MovieType = { id, title, releaseYear, imageUrl };// Create new movie object
+  moviesData.push(newMovie);// Add to movies array
+
+  res.status(201).json(newMovie);// Respond with the new movie
 });
-
 
 // Start server 
 app.listen(3000, () => {
