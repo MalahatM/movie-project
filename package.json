@@ -2,11 +2,10 @@
   "name": "movie-project",
   "version": "1.0.0",
   "main": "index.js",
-   "type": "module", 
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-	"build": "tsc",
-	"start": "node dist/server.js"
+    "dev": "ts-node src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +16,8 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/node": "^24.3.1",
+    "ts-node": "^10.9.2",
     "typescript": "^5.9.2"
   }
 }
