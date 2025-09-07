@@ -10,7 +10,7 @@ interface MovieType {
   releaseYear: number; 
   imageUrl: string;    
 }
-const MovieSchema = z.object({
+const MoviesSchema = z.object({
 	  id: z.number(),
 	  title: z.string(),
 	  releaseYear: z.number(),
@@ -64,7 +64,7 @@ app.get('/movies', (req, res) => {
 // POST new Movie
 
 app.post("/movies", (req, res) => {// Add new movie
-  const movieResult = MovieSchema.safeParse(req.body);// Validate input data
+  const movieResult = MoviesSchema.safeParse(req.body);// Validate input data
 
   if (!movieResult.success) {// Validation failed
     return res.status(400).json({ message: "Invalid movie data" });
@@ -78,6 +78,15 @@ app.post("/movies", (req, res) => {// Add new movie
 
   res.status(201).json(newMovie);// Respond with the new movie
 });
+
+//DELETE movie
+app.delete('/movies/:id', (req, res) => {// Delete movie by ID
+	const Id=Number(req.params.id);// Get ID from URL
+	const movieIndex=moviesData.findIndex(movie=>movie.id===Id);// Find movie index
+	const deleteResult=moviesData.splice(movieIndex,1)[0];// Remove movie from array
+	res.status(200).json(deleteResult);// Respond with deleted movie
+});
+
 
 // Start server 
 app.listen(3000, () => {
