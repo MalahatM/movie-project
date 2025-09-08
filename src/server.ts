@@ -87,6 +87,22 @@ app.delete('/movies/:id', (req, res) => {// Delete movie by ID
 	res.status(200).json(deleteResult);// Respond with deleted movie
 });
 
+// PUT movie
+app.put('/movies/:id', (req, res) => { // Update movie by ID
+  const index = moviesData.findIndex(movie => movie.id === Number(req.params.id)); // Find movie index
+
+ const { id, title, releaseYear, imageUrl } = req.body; // Get updated data from request body
+
+  const updatedMovie: MovieType = {
+    id,
+    title,
+    releaseYear,
+    imageUrl
+  }; // Create updated movie object
+
+  moviesData[index] = updatedMovie; // Update movie in array
+  res.status(200).json(updatedMovie); // Respond with updated movie
+});
 
 // Start server 
 app.listen(3000, () => {
