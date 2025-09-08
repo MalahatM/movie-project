@@ -59,5 +59,22 @@ router.delete("/:id", (req, res) => {// Delete review by ID
   res.status(200).json(deletedReview);// Respond with deleted review
 });
 
+// PUT review by ID 
+router.put("/:id", (req, res) => {
+  const id = Number(req.params.id);
+  const index = reviewsData.findIndex((review) => review.id === id)
+
+  // validate the entire review object
+  const parsed = ReviewSchema.safeParse(req.body);
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Invalid review data" });
+  }
+  // Replace the entire review
+  reviewsData[index] = parsed.data;
+
+  res.status(200).json(parsed.data);
+});
+
+
 
 export default router;
