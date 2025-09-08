@@ -50,4 +50,14 @@ router.post("/", (req, res) => {
   res.status(201).json(newReview);// Respond with new review
 });
 
+// DELETE review by ID
+router.delete("/:id", (req, res) => {// Delete review by ID
+  const id = Number(req.params.id);// Get ID from URL
+  const index = reviewsData.findIndex((review) => review.id === id);// Find review index
+
+  const deletedReview = reviewsData.splice(index, 1)[0];// Remove review from array 
+  res.status(200).json(deletedReview);// Respond with deleted review
+});
+
+
 export default router;
