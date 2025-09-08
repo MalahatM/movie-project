@@ -1,4 +1,6 @@
 import express from "express";
+import { z } from "zod";
+
 
 // Interface for Reviews
 interface ReviewType {
@@ -7,6 +9,13 @@ interface ReviewType {
   reviewer: string; 
   rating: number; 
 }
+const ReviewSchema = z.object({// Validation schema
+  id: z.number(),
+  movieId: z.number(),
+  reviewer: z.string(),
+  rating: z.number(),
+});
+
 
 // 10 person for testing)
 const reviewsData: ReviewType[] = [
@@ -22,19 +31,23 @@ const reviewsData: ReviewType[] = [
   { id: 10, movieId: 5, reviewer: "Malahat", rating: 5 },
 ];
 
-const router = express.Router();
+const router = express.Router();// Create router
 
 // GET all reviews
-router.get("/", (req,res) => {
+router.get("/", (req, res) => {
   res.status(200).json(reviewsData);
 });
 
-// POST new review
+// POST new review with Zod validation
 router.post("/", (req, res) => {
-  const { id, movieId, reviewer, rating } = req.body;
-  const newReview: ReviewType = { id, movieId, reviewer, rating };
-  reviewsData.push(newReview);
-  res.status(201).json(newReview);
+  const parsed = ReviewSchema.safeParse(req.body);// Validate input
+  if (!parsed.success) {
+    return res.status(400).json({ message: "Invalid review data" });// Validation failed
+  }
+
+  const newReview: ReviewType = parsed.data;//validated data
+  reviewsData.push(newReview);// Add to array
+  res.status(201).json(newReview);// Respond with new review
 });
 
 export default router;

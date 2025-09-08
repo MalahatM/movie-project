@@ -1,5 +1,6 @@
 import express from 'express';
 import {z}from 'zod';
+import reviewer from './routes/reviews';// Import reviews router
 
 
 
@@ -114,6 +115,7 @@ app.patch('/movies/:id', (req, res) => {
 	  res.status(200).json(updatedMovie);// Respond with updated movie
  }); 
 
+ app.use('/reviews', reviewer);// Use reviews router for /reviews endpoint
 // Start server 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
