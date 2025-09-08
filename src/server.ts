@@ -104,6 +104,16 @@ app.put('/movies/:id', (req, res) => { // Update movie by ID
   res.status(200).json(updatedMovie); // Respond with updated movie
 });
 
+//PATCH movie
+app.patch('/movies/:id', (req, res) => {
+	const id=Number(req.params.id);// Get ID from URL
+	  const index = moviesData.findIndex(movie => movie.id === Number(req.params.id)); // Find movie index
+	  const existingMovie=moviesData[index];// Get existing movie
+	  const updatedMovie={...existingMovie,...req.body};// Merge existing movie with updated data
+	  moviesData[index]=updatedMovie;
+	  res.status(200).json(updatedMovie);// Respond with updated movie
+ }); 
+
 // Start server 
 app.listen(3000, () => {
   console.log('Server is running on port 3000');
